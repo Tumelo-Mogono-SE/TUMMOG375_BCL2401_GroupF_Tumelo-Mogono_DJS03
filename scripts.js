@@ -63,35 +63,39 @@ htmlElements.list.dataListItem.appendChild(starting)
 
 
 
-const genreHtml = document.createDocumentFragment()
-const firstGenreElement = createOptionElement('any', 'All Authors');
-genreHtml.appendChild(firstGenreElement)
+const setupGenreOptions = () => {
+    const genreHtml = document.createDocumentFragment()
+    genreHtml.appendChild(createOptionElement('any', 'All Genres'))
 
-for (const [id, name] of Object.entries(genres)) {
-    const element = createOptionElement(id, name);
-    genreHtml.appendChild(element)
-}
+    for (const [id, name] of Object.entries(genres)) {
+        genreHtml.appendChild(createOptionElement(id, name));
+    }
 
 htmlElements.search.dataSearchGenre.appendChild(genreHtml)
-
-
-
-
-
-
-
-const authorsHtml = document.createDocumentFragment()
-const firstAuthorElement = createOptionElement('any', 'All Authors');
-authorsHtml.appendChild(firstAuthorElement)
-
-for (const [id, name] of Object.entries(authors)) {
-    const element = createOptionElement(id, name);
-    authorsHtml.appendChild(element)
 }
 
-htmlElements.search.dataSearchAuthor.appendChild(authorsHtml)
+setupGenreOptions();
 
-const createOptionElement = (value, name) => {
+
+
+
+
+
+
+const setupAuthorOptions = () => {
+    const authorsHtml = document.createDocumentFragment();
+    authorsHtml.appendChild(createOptionElement('any', 'All Authors'));
+
+    for (const [id, name] of Object.entries(authors)) {
+        authorsHtml.appendChild(createOptionElement(id, name))
+    }
+
+    htmlElements.search.dataSearchAuthor.appendChild(authorsHtml)
+};
+
+setupAuthorOptions();
+
+function createOptionElement(value, name) {
     const element = document.createElement('option');
     element.value = value;
     element.innerText = name;
