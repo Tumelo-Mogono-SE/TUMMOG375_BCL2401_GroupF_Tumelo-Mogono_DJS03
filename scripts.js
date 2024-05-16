@@ -56,6 +56,7 @@ const renderBookPreviews = (fragment, bookList) => {
     
         fragment.appendChild(element);
     };
+    showMoreButton();
 };
 
 
@@ -107,13 +108,16 @@ if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').match
     document.documentElement.style.setProperty('--color-light', '255, 255, 255');
 }
 
-htmlElements.list.dataListButton.innerText = `Show more (${books.length - BOOKS_PER_PAGE})`
-htmlElements.list.dataListButton.disabled = (matches.length - (page * BOOKS_PER_PAGE)) > 0
+function showMoreButton() {
+    htmlElements.list.dataListButton.innerText = `Show more (${books.length - BOOKS_PER_PAGE})`
+    const remainingBooks = matches.length - (page * BOOKS_PER_PAGE);
+    htmlElements.list.dataListButton.disabled = remainingBooks <= 0
 
-htmlElements.list.dataListButton.innerHTML = `
-    <span>Show more</span>
-    <span class="list__remaining"> (${(matches.length - (page * BOOKS_PER_PAGE)) > 0 ? (matches.length - (page * BOOKS_PER_PAGE)) : 0})</span>
-`
+    htmlElements.list.dataListButton.innerHTML = `
+        <span>Show more</span>
+        <span class="list__remaining"> (${remainingBooks > 0 ? remainingBooks : 0})</span>
+    `;
+}
 
 htmlElements.search.dataSearchCancel.addEventListener('click', () => {
     htmlElements.search.dataSearchOverlay.open = false
@@ -189,23 +193,18 @@ htmlElements.search.dataSearchForm.addEventListener('submit', (event) => {
     renderBookPreviews(newItems, result.slice(0, BOOKS_PER_PAGE));
     
     htmlElements.list.dataListItem.appendChild(newItems)
-    htmlElements.list.dataListButton.disabled = (matches.length - (page * BOOKS_PER_PAGE)) < 1
-
-    htmlElements.list.dataListButton.innerHTML = `
-        <span>Show more</span>
-        <span class="list__remaining"> (${(matches.length - (page * BOOKS_PER_PAGE)) > 0 ? (matches.length - (page * BOOKS_PER_PAGE)) : 0})</span>
-    `
+    showMoreButton();
 
     window.scrollTo({top: 0, behavior: 'smooth'});
     htmlElements.search.dataSearchOverlay.open = false
 })
 
 htmlElements.list.dataListButton.addEventListener('click', () => {
+    page += 1;
     const fragment = document.createDocumentFragment()
     renderBookPreviews(fragment, matches.slice(page * BOOKS_PER_PAGE, (page + 1) * BOOKS_PER_PAGE))
     
     htmlElements.list.dataListItem.appendChild(fragment)
-    page += 1
 })
 
 htmlElements.list.dataListItem.addEventListener('click', (event) => {
