@@ -56,10 +56,9 @@ const renderBookPreviews = (fragment, bookList) => {
     
         fragment.appendChild(element);
     };
+    htmlElements.list.dataListItem.appendChild(fragment);
     showMoreButton();
 };
-
-
 
 
 const setupGenreOptions = () => {
@@ -72,11 +71,6 @@ const setupGenreOptions = () => {
 
 htmlElements.search.dataSearchGenre.appendChild(genreHtml)
 }
-
-
-
-
-
 
 
 const setupAuthorOptions = () => {
@@ -192,7 +186,6 @@ htmlElements.search.dataSearchForm.addEventListener('submit', (event) => {
     const newItems = document.createDocumentFragment()
     renderBookPreviews(newItems, result.slice(0, BOOKS_PER_PAGE));
     
-    htmlElements.list.dataListItem.appendChild(newItems)
     showMoreButton();
 
     window.scrollTo({top: 0, behavior: 'smooth'});
@@ -204,7 +197,6 @@ htmlElements.list.dataListButton.addEventListener('click', () => {
     const fragment = document.createDocumentFragment()
     renderBookPreviews(fragment, matches.slice(page * BOOKS_PER_PAGE, (page + 1) * BOOKS_PER_PAGE))
     
-    htmlElements.list.dataListItem.appendChild(fragment)
 })
 
 htmlElements.list.dataListItem.addEventListener('click', (event) => {
@@ -239,7 +231,6 @@ htmlElements.list.dataListItem.addEventListener('click', (event) => {
 function initialization() {
     const starting = document.createDocumentFragment();
     renderBookPreviews(starting, matches.slice(0, BOOKS_PER_PAGE));
-    htmlElements.list.dataListItem.appendChild(starting);
 
     setupAuthorOptions();
     setupGenreOptions();
