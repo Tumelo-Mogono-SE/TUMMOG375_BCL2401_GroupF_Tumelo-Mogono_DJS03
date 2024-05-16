@@ -36,29 +36,27 @@ const htmlElements = {
 let page = 1;
 let matches = books
 
-const starting = document.createDocumentFragment()
 
-for (const { author, id, image, title } of matches.slice(0, BOOKS_PER_PAGE)) {
-    const element = document.createElement('button')
-    element.classList = 'preview'
-    element.setAttribute('data-preview', id)
-
-    element.innerHTML = `
-        <img
-            class="preview__image"
-            src="${image}"
-        />
-        
-        <div class="preview__info">
-            <h3 class="preview__title">${title}</h3>
-            <div class="preview__author">${authors[author]}</div>
-        </div>
-    `
-
-    starting.appendChild(element)
-}
-
-htmlElements.list.dataListItem.appendChild(starting)
+const renderBookPreviews = (fragment, bookList) => {
+    for (const { author, id, image, title } of bookList) {
+        const element = document.createElement('button');
+        element.classList = 'preview';
+        element.setAttribute('data-preview', id);
+        element.innerHTML = `
+            <img
+                class="preview__image"
+                src="${image}"
+            />
+            
+            <div class="preview__info">
+                <h3 class="preview__title">${title}</h3>
+                <div class="preview__author">${authors[author]}</div>
+            </div>
+        `;
+    
+        fragment.appendChild(element);
+    };
+};
 
 
 
@@ -73,8 +71,6 @@ const setupGenreOptions = () => {
 
 htmlElements.search.dataSearchGenre.appendChild(genreHtml)
 }
-
-setupGenreOptions();
 
 
 
@@ -93,7 +89,6 @@ const setupAuthorOptions = () => {
     htmlElements.search.dataSearchAuthor.appendChild(authorsHtml)
 };
 
-setupAuthorOptions();
 
 function createOptionElement(value, name) {
     const element = document.createElement('option');
@@ -191,27 +186,8 @@ htmlElements.search.dataSearchForm.addEventListener('submit', (event) => {
 
     htmlElements.list.dataListItem.innerHTML = ''
     const newItems = document.createDocumentFragment()
-
-    for (const { author, id, image, title } of result.slice(0, BOOKS_PER_PAGE)) {
-        const element = document.createElement('button')
-        element.classList = 'preview'
-        element.setAttribute('data-preview', id)
+    renderBookPreviews(newItems, result.slice(0, BOOKS_PER_PAGE));
     
-        element.innerHTML = `
-            <img
-                class="preview__image"
-                src="${image}"
-            />
-            
-            <div class="preview__info">
-                <h3 class="preview__title">${title}</h3>
-                <div class="preview__author">${authors[author]}</div>
-            </div>
-        `
-
-        newItems.appendChild(element)
-    }
-
     htmlElements.list.dataListItem.appendChild(newItems)
     htmlElements.list.dataListButton.disabled = (matches.length - (page * BOOKS_PER_PAGE)) < 1
 
@@ -226,27 +202,8 @@ htmlElements.search.dataSearchForm.addEventListener('submit', (event) => {
 
 htmlElements.list.dataListButton.addEventListener('click', () => {
     const fragment = document.createDocumentFragment()
-
-    for (const { author, id, image, title } of matches.slice(page * BOOKS_PER_PAGE, (page + 1) * BOOKS_PER_PAGE)) {
-        const element = document.createElement('button')
-        element.classList = 'preview'
-        element.setAttribute('data-preview', id)
+    renderBookPreviews(fragment, matches.slice(page * BOOKS_PER_PAGE, (page + 1) * BOOKS_PER_PAGE))
     
-        element.innerHTML = `
-            <img
-                class="preview__image"
-                src="${image}"
-            />
-            
-            <div class="preview__info">
-                <h3 class="preview__title">${title}</h3>
-                <div class="preview__author">${authors[author]}</div>
-            </div>
-        `
-
-        fragment.appendChild(element)
-    }
-
     htmlElements.list.dataListItem.appendChild(fragment)
     page += 1
 })
@@ -279,3 +236,14 @@ htmlElements.list.dataListItem.addEventListener('click', (event) => {
         htmlElements.list.dataListDescription.innerText = active.description
     }
 })
+
+function initialization() {
+    const starting = document.createDocumentFragment();
+    renderBookPreviews(starting, matches.slice(0, BOOKS_PER_PAGE));
+    htmlElements.list.dataListItem.appendChild(starting);
+
+    setupAuthorOptions();
+    setupGenreOptions();
+}
+
+initialization();
