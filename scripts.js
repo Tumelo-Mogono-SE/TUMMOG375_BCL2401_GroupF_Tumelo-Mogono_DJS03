@@ -64,15 +64,11 @@ htmlElements.list.dataListItem.appendChild(starting)
 
 
 const genreHtml = document.createDocumentFragment()
-const firstGenreElement = document.createElement('option')
-firstGenreElement.value = 'any'
-firstGenreElement.innerText = 'All Genres'
+const firstGenreElement = createOptionElement('any', 'All Authors');
 genreHtml.appendChild(firstGenreElement)
 
 for (const [id, name] of Object.entries(genres)) {
-    const element = document.createElement('option')
-    element.value = id
-    element.innerText = name
+    const element = createOptionElement(id, name);
     genreHtml.appendChild(element)
 }
 
@@ -85,19 +81,22 @@ htmlElements.search.dataSearchGenre.appendChild(genreHtml)
 
 
 const authorsHtml = document.createDocumentFragment()
-const firstAuthorElement = document.createElement('option')
-firstAuthorElement.value = 'any'
-firstAuthorElement.innerText = 'All Authors'
+const firstAuthorElement = createOptionElement('any', 'All Authors');
 authorsHtml.appendChild(firstAuthorElement)
 
 for (const [id, name] of Object.entries(authors)) {
-    const element = document.createElement('option')
-    element.value = id
-    element.innerText = name
+    const element = createOptionElement(id, name);
     authorsHtml.appendChild(element)
 }
 
 htmlElements.search.dataSearchAuthor.appendChild(authorsHtml)
+
+const createOptionElement = (value, name) => {
+    const element = document.createElement('option');
+    element.value = value;
+    element.innerText = name;
+    return element;
+}
 
 if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
     htmlElements.setting.dataSettingTheme.value = 'night'
