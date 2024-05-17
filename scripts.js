@@ -90,17 +90,27 @@ function createOptionElement(value, name) {
     element.value = value;
     element.innerText = name;
     return element;
-}
+};
 
-if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    htmlElements.setting.dataSettingTheme.value = 'night'
-    document.documentElement.style.setProperty('--color-dark', '255, 255, 255');
-    document.documentElement.style.setProperty('--color-light', '10, 10, 20');
-} else {
-    htmlElements.setting.dataSettingTheme.value = 'day'
-    document.documentElement.style.setProperty('--color-dark', '10, 10, 20');
-    document.documentElement.style.setProperty('--color-light', '255, 255, 255');
-}
+const setThemeProperties = (theme) => {
+    if (theme === 'night') {
+        document.documentElement.style.setProperty('--color-dark', '255, 255, 255');
+        document.documentElement.style.setProperty('--color-light', '10, 10, 20');
+    } else {
+        document.documentElement.style.setProperty('--color-dark', '10, 10, 20');
+        document.documentElement.style.setProperty('--color-light', '255, 255, 255');
+    };
+};
+
+const applyPreferredTheme = () => {
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        htmlElements.setting.dataSettingTheme.value = 'night';
+        setThemeProperties('night');
+    } else {
+        htmlElements.setting.dataSettingTheme.value = 'day';
+        setThemeProperties('day');
+    };
+};
 
 function showMoreButton() {
     htmlElements.list.dataListButton.innerText = `Show more (${books.length - BOOKS_PER_PAGE})`
@@ -111,7 +121,7 @@ function showMoreButton() {
         <span>Show more</span>
         <span class="list__remaining"> (${remainingBooks > 0 ? remainingBooks : 0})</span>
     `;
-}
+};
 
 htmlElements.search.dataSearchCancel.addEventListener('click', () => {
     htmlElements.search.dataSearchOverlay.open = false
@@ -139,13 +149,7 @@ htmlElements.setting.dataSettingForm.addEventListener('submit', (event) => {
     const formData = new FormData(event.target)
     const { theme } = Object.fromEntries(formData)
 
-    if (theme === 'night') {
-        document.documentElement.style.setProperty('--color-dark', '255, 255, 255');
-        document.documentElement.style.setProperty('--color-light', '10, 10, 20');
-    } else {
-        document.documentElement.style.setProperty('--color-dark', '10, 10, 20');
-        document.documentElement.style.setProperty('--color-light', '255, 255, 255');
-    }
+    setThemeProperties(theme);
     
     htmlElements.setting.dataSettingOverlay.open = false
 })
@@ -234,6 +238,7 @@ function initialization() {
 
     setupAuthorOptions();
     setupGenreOptions();
-}
+};
 
 initialization();
+applyPreferredTheme();
