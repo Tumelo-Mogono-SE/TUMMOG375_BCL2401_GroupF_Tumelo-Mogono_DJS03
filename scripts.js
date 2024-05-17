@@ -1,6 +1,7 @@
 import { books, authors, genres, BOOKS_PER_PAGE } from './data.js';
-import { renderBookPreviews, setupGenreOptions, setupAuthorOptions, setThemeProperties, applyPreferredTheme, showMoreButton } from './helper.js';
+import { renderBookPreviews, setupGenreOptions, setupAuthorOptions, setThemeProperties, applyPreferredTheme, showMoreButton, handleListItemOnClick } from './helper.js';
 import { htmlElements } from './elements.js';
+// import {  } from './eventHandlers.js';
 
 
 let page = 1;
@@ -85,36 +86,10 @@ htmlElements.list.dataListButton.addEventListener('click', () => {
     const newBooks = matches.slice(page * BOOKS_PER_PAGE, (page + 1) * BOOKS_PER_PAGE);
     renderBookPreviews(fragment, newBooks);
     showMoreButton(page, matches);
-    
 });
 
 htmlElements.list.dataListItem.addEventListener('click', (event) => {
-    const pathArray = Array.from(event.path || event.composedPath());
-    let active = null;
-
-    for (const node of pathArray) {
-        if (active) break;
-
-        if (node?.dataset?.preview) {
-            let result = null
-    
-            for (const singleBook of books) {
-                if (result) break;
-                if (singleBook.id === node?.dataset?.preview) result = singleBook
-            } 
-        
-            active = result
-        };
-    };
-    
-    if (active) {
-        htmlElements.list.dataListActive.open = true;
-        htmlElements.list.dataListBlur.src = active.image;
-        htmlElements.list.dataListImage.src = active.image;
-        htmlElements.list.dataListTitle.innerText = active.title;
-        htmlElements.list.dataListSubtitle.innerText = `${authors[active.author]} (${new Date(active.published).getFullYear()})`;
-        htmlElements.list.dataListDescription.innerText = active.description;
-    };
+    handleListItemOnClick(event);
 });
 
 function initialization() {

@@ -90,4 +90,33 @@ export function showMoreButton(page, matches) {
     `;
 };
 
+export const handleListItemOnClick = (event) => {
+    const pathArray = Array.from(event.path || event.composedPath());
+    let active = null;
+
+    for (const node of pathArray) {
+        if (active) break;
+
+        if (node?.dataset?.preview) {
+            let result = null
+    
+            for (const singleBook of books) {
+                if (result) break;
+                if (singleBook.id === node?.dataset?.preview) result = singleBook
+            } 
+        
+            active = result
+        };
+    };
+    
+    if (active) {
+        htmlElements.list.dataListActive.open = true;
+        htmlElements.list.dataListBlur.src = active.image;
+        htmlElements.list.dataListImage.src = active.image;
+        htmlElements.list.dataListTitle.innerText = active.title;
+        htmlElements.list.dataListSubtitle.innerText = `${authors[active.author]} (${new Date(active.published).getFullYear()})`;
+        htmlElements.list.dataListDescription.innerText = active.description;
+    };
+}
+
 
