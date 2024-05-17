@@ -124,35 +124,35 @@ function showMoreButton() {
 };
 
 htmlElements.search.dataSearchCancel.addEventListener('click', () => {
-    htmlElements.search.dataSearchOverlay.open = false
-})
+    htmlElements.search.dataSearchOverlay.open = false;
+});
 
 htmlElements.setting.dataSettingCancel.addEventListener('click', () => {
-    htmlElements.setting.dataSettingOverlay.open = false
-})
+    htmlElements.setting.dataSettingOverlay.open = false;
+});
 
 htmlElements.header.dataHeaderSearch.addEventListener('click', () => {
-    htmlElements.search.dataSearchOverlay.open = true 
-    htmlElements.search.dataSearchTitle.focus()
-})
+    htmlElements.search.dataSearchOverlay.open = true ;
+    htmlElements.search.dataSearchTitle.focus();
+});
 
 htmlElements.header.dataHeaderSetting.addEventListener('click', () => {
-    htmlElements.setting.dataSettingOverlay.open = true 
-})
+    htmlElements.setting.dataSettingOverlay.open = true ;
+});
 
 htmlElements.list.dataListClose.addEventListener('click', () => {
-    htmlElements.list.dataListActive.open = false
-})
+    htmlElements.list.dataListActive.open = false;
+});
 
 htmlElements.setting.dataSettingForm.addEventListener('submit', (event) => {
-    event.preventDefault()
-    const formData = new FormData(event.target)
-    const { theme } = Object.fromEntries(formData)
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const { theme } = Object.fromEntries(formData);
 
     setThemeProperties(theme);
     
-    htmlElements.setting.dataSettingOverlay.open = false
-})
+    htmlElements.setting.dataSettingOverlay.open = false;
+});
 
 htmlElements.search.dataSearchForm.addEventListener('submit', (event) => {
     event.preventDefault()
@@ -187,28 +187,29 @@ htmlElements.search.dataSearchForm.addEventListener('submit', (event) => {
     }
 
     htmlElements.list.dataListItem.innerHTML = ''
-    const newItems = document.createDocumentFragment()
+    const newItems = document.createDocumentFragment();
     renderBookPreviews(newItems, result.slice(0, BOOKS_PER_PAGE));
     
     showMoreButton();
 
     window.scrollTo({top: 0, behavior: 'smooth'});
     htmlElements.search.dataSearchOverlay.open = false
-})
+});
 
 htmlElements.list.dataListButton.addEventListener('click', () => {
     page += 1;
-    const fragment = document.createDocumentFragment()
-    renderBookPreviews(fragment, matches.slice(page * BOOKS_PER_PAGE, (page + 1) * BOOKS_PER_PAGE))
+    const fragment = document.createDocumentFragment();
+    const newBooks = matches.slice(page * BOOKS_PER_PAGE, (page + 1) * BOOKS_PER_PAGE);
+    renderBookPreviews(fragment, newBooks);
     
-})
+});
 
 htmlElements.list.dataListItem.addEventListener('click', (event) => {
-    const pathArray = Array.from(event.path || event.composedPath())
-    let active = null
+    const pathArray = Array.from(event.path || event.composedPath());
+    let active = null;
 
     for (const node of pathArray) {
-        if (active) break
+        if (active) break;
 
         if (node?.dataset?.preview) {
             let result = null
@@ -219,18 +220,18 @@ htmlElements.list.dataListItem.addEventListener('click', (event) => {
             } 
         
             active = result
-        }
-    }
+        };
+    };
     
     if (active) {
-        htmlElements.list.dataListActive.open = true
-        htmlElements.list.dataListBlur.src = active.image
-        htmlElements.list.dataListImage.src = active.image
-        htmlElements.list.dataListTitle.innerText = active.title
-        htmlElements.list.dataListSubtitle.innerText = `${authors[active.author]} (${new Date(active.published).getFullYear()})`
-        htmlElements.list.dataListDescription.innerText = active.description
-    }
-})
+        htmlElements.list.dataListActive.open = true;
+        htmlElements.list.dataListBlur.src = active.image;
+        htmlElements.list.dataListImage.src = active.image;
+        htmlElements.list.dataListTitle.innerText = active.title;
+        htmlElements.list.dataListSubtitle.innerText = `${authors[active.author]} (${new Date(active.published).getFullYear()})`;
+        htmlElements.list.dataListDescription.innerText = active.description;
+    };
+});
 
 function initialization() {
     const starting = document.createDocumentFragment();
