@@ -1,7 +1,8 @@
+
 import { books, authors, genres, BOOKS_PER_PAGE } from './data.js';
 import { renderBookPreviews, setupGenreOptions, setupAuthorOptions, setThemeProperties, applyPreferredTheme, showMoreButton, handleListItemOnClick } from './helper.js';
 import { htmlElements } from './elements.js';
-// import {  } from './eventHandlers.js';
+
 
 
 let page = 1;
@@ -74,10 +75,10 @@ htmlElements.search.dataSearchForm.addEventListener('submit', (event) => {
     const newItems = document.createDocumentFragment();
     renderBookPreviews(newItems, result.slice(0, BOOKS_PER_PAGE));
     
-    showMoreButton();
+    showMoreButton(page, matches);
 
     window.scrollTo({top: 0, behavior: 'smooth'});
-    htmlElements.search.dataSearchOverlay.open = false
+    htmlElements.search.dataSearchOverlay.open = false;
 });
 
 htmlElements.list.dataListButton.addEventListener('click', () => {

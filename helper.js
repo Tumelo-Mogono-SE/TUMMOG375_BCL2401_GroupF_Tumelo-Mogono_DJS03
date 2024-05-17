@@ -1,6 +1,15 @@
 import { books, authors, genres, BOOKS_PER_PAGE } from './data.js';
 import { htmlElements } from './elements.js';
 
+/**
+ * Creates a book element.
+ * @param {Object} book - The book data.
+ * @param {string} book.author - The author of the book.
+ * @param {string} book.id - The book ID.
+ * @param {string} book.image - The URL of the book image.
+ * @param {string} book.title - The title of the book.
+ * @returns {HTMLElement} The book element.
+ */
 export const createBookElement = (book) => {
     const { author, id, image, title } = book;
     const element = document.createElement('button');
@@ -20,6 +29,11 @@ export const createBookElement = (book) => {
     return element;
 }
 
+/**
+ * Renders book previews.
+ * @param {DocumentFragment} documentFragment - The document fragment to append book elements to.
+ * @param {Object[]} bookList - The list of books to render.
+ */
 export const renderBookPreviews = (documentFragment, bookList) => {
     for ( const book of bookList) {
         documentFragment.appendChild(createBookElement(book));
@@ -27,8 +41,10 @@ export const renderBookPreviews = (documentFragment, bookList) => {
     htmlElements.list.dataListItem.appendChild(documentFragment);
 };
 
-
-export const setupGenreOptions = (genre) => {
+/**
+ * Sets up genre options in the search form.
+ */
+export const setupGenreOptions = () => {
     const genreHtml = document.createDocumentFragment()
     genreHtml.appendChild(createOptionElement('any', 'All Genres'))
 
@@ -39,7 +55,9 @@ export const setupGenreOptions = (genre) => {
 htmlElements.search.dataSearchGenre.appendChild(genreHtml)
 }
 
-
+/**
+ * Sets up author options in the search form.
+ */
 export const setupAuthorOptions = () => {
     const authorsHtml = document.createDocumentFragment();
     authorsHtml.appendChild(createOptionElement('any', 'All Authors'));
@@ -51,7 +69,12 @@ export const setupAuthorOptions = () => {
     htmlElements.search.dataSearchAuthor.appendChild(authorsHtml)
 };
 
-
+/**
+ * Creates an option element.
+ * @param {string} value - The value of the option.
+ * @param {string} name - The display name of the option.
+ * @returns {HTMLOptionElement} The option element.
+ */
 export function createOptionElement(value, name) {
     const element = document.createElement('option');
     element.value = value;
@@ -59,6 +82,10 @@ export function createOptionElement(value, name) {
     return element;
 };
 
+/**
+ * Sets the theme properties.
+ * @param {string | File } theme - The theme to set ('night' or 'day').
+ */
 export const setThemeProperties = (theme) => {
     if (theme === 'night') {
         document.documentElement.style.setProperty('--color-dark', '255, 255, 255');
@@ -69,6 +96,9 @@ export const setThemeProperties = (theme) => {
     };
 };
 
+/**
+ * Applies the user's preferred theme based on their system settings.
+ */
 export const applyPreferredTheme = () => {
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
         htmlElements.setting.dataSettingTheme.value = 'night';
@@ -79,6 +109,9 @@ export const applyPreferredTheme = () => {
     };
 };
 
+/**
+ * Updates the "Show More" button text and state.
+ */
 export function showMoreButton(page, matches) {
     htmlElements.list.dataListButton.innerText = `Show more (${books.length - BOOKS_PER_PAGE})`
     let remainingBooks = matches.length - (page * BOOKS_PER_PAGE);
